@@ -2,6 +2,26 @@
 
 #include "utils/debug.h"
 
+void FileSystem::printDirContentsToDebug(const char *path, uint8_t level)
+{
+#if DEBUG_ENABLED
+    Dir dir = _fs->openDir(path);
+
+    while (dir.next())
+    {
+        if (dir.isDirectory())
+        {
+            DEBUG_PRINTF("%*s/%s\n", level * 2, "", dir.fileName().c_str());
+            printDirContentsToDebug(dir.fileName().c_str(), level + 1);
+        }
+        else if (dir.isFile())
+        {
+            DEBUG_PRINTF("%*s/%s (%d bytes)\n", level * 2, "", dir.fileName().c_str(), dir.fileSize());
+        }
+    }
+#endif
+}
+
 void FileSystem::mount()
 {
     DEBUG_PRINTLN(F("Mounting file system..."));
@@ -17,8 +37,7 @@ void FileSystem::mount()
                  fsInfo.maxPathLength, fsInfo.maxOpenFiles);
 
     // List stored files
-    Dir rootDir = _fs->openDir("/");
-    // TODO: List files recursively as soon as there are any to test with...
+    printDirContentsToDebug("/");
 #endif
 }
 
