@@ -1,13 +1,11 @@
 #pragma once
 
 #include "FileSystem.h"
+#include "proto/config.pb.h"
 
-#define NODE_CONFIG_FILE_NAME "/config.json"
+#define NODE_CONFIG_FILE_NAME "/config.bin"
 
-struct NodeSettings
-{
-    char nodeName[64];
-};
+#define SETTINGS_VERSION 1
 
 class NodeConfig
 {
@@ -17,6 +15,10 @@ private:
     bool _settingsLoaded;
     NodeSettings _settings;
 
+    void initSettings();
+
+    void migrateSettings(NodeSettings &settings);
+
     void loadConfigFile();
     void saveConfigFile();
 
@@ -25,4 +27,6 @@ public:
 
     NodeSettings getSettings();
     void updateSettings(NodeSettings settings);
+
+    void printSettingsToDebug();
 };

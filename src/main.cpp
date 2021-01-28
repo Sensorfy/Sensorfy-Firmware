@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#include "debug.h"
+#include "utils/debug.h"
 #include "persistence/FileSystem.h"
 #include "persistence/NodeConfig.h"
 
@@ -21,8 +21,13 @@ void setup()
 
   DEBUG_PRINTF("Initializing Sensorfy firmware (Built on %S %S)...\n", F(__DATE__), F(__TIME__));
 
-  // Mount file system
   _fileSystem.mount();
+  _nodeConfig.printSettingsToDebug();
+
+  delay(5000);
+  NodeSettings s = _nodeConfig.getSettings();
+  strcpy(s.node_name, "Testnode 1");
+  _nodeConfig.updateSettings(s);
 }
 
 void loop()
