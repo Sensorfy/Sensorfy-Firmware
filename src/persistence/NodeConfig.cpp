@@ -86,9 +86,14 @@ NodeSettings NodeConfig::getSettings()
     {
         // Can they be read from the file system?
         if (_fileSystem->getUnderlyingFs()->exists(NODE_CONFIG_FILE_NAME))
+        {
             loadConfigFile();
+        }
         else
+        {
             initSettings();
+            saveConfigFile();
+        }
 
         _settingsLoaded = true;
     }
@@ -104,6 +109,14 @@ void NodeConfig::updateSettings(NodeSettings settings)
     _settings = settings;
 
     saveConfigFile();
+}
+
+void NodeConfig::resetSettings()
+{
+    // Reset settings to initial values
+    initSettings();
+    saveConfigFile();
+    _settingsLoaded = true;
 }
 
 void NodeConfig::printSettingsToDebug()

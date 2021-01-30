@@ -27,6 +27,7 @@ public:
 
     NodeSettings getSettings();
     void updateSettings(NodeSettings settings);
+    void resetSettings();
 
     void printSettingsToDebug();
 };

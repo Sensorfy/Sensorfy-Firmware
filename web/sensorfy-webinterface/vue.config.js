@@ -21,7 +21,7 @@ module.exports = {
 
   // Webpack options
   configureWebpack: {
-    // Shorter for js files
+    // Shorter names for js files
     output: {
       filename: '[name].[chunkhash:4].js',
       chunkFilename: '[name].[chunkhash:4].js',
@@ -42,7 +42,7 @@ module.exports = {
     }
   },
 
-  // Shorter for css files
+  // Shorter names for css files
   css: {
     extract: {
       filename: '[name].[chunkhash:4].css',
