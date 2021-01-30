@@ -80,4 +80,5 @@ void setup()
 
 void loop()
 {
+  _configMode.tick();
 }

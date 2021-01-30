@@ -1,8 +1,12 @@
 #pragma once
 
+#include <ESP8266WiFi.h>
+#include <DNSServer.h>
+
 #include "persistence/FileSystem.h"
 #include "persistence/NodeConfig.h"
 #include "hardware/InternalDigitalPortExpander.h"
+#include "WebServer.h"
 
 class ConfigMode
 {
@@ -11,14 +15,28 @@ private:
     NodeConfig *_nodeConfig;
     InternalDigitalPortExpander *_internalDigitalPortExpander;
 
+    WebServer _webServer;
+
+    DNSServer _dnsServer;
+
     bool _enabled{false};
+
+#if DEBUG_ENABLED
+    WiFiEventHandler _stationConnectedHandler;
+    WiFiEventHandler _stationDisconnectedHandler;
+#endif
 
     void startWiFiAccessPoint();
     void stopWiFiAccessPoint();
+
+    void startDNSServer();
+    void stopDNSServer();
 
 public:
     ConfigMode(FileSystem *fileSystem, NodeConfig *nodeConfig, InternalDigitalPortExpander *internalDigitalPortExpander);
 
     void enable();
     void disable();
+
+    void tick();
 };
