@@ -124,7 +124,7 @@ void NodeConfig::printSettingsToDebug()
 #if DEBUG_ENABLED
     NodeSettings settings = getSettings();
 
-    DEBUG_PRINTF("Settings version: %d\n", settings.version);
+    DEBUG_PRINTF("Settings version: %u\n", settings.version);
     DEBUG_PRINTF("Node name: %s\n", settings.node_name);
     DEBUG_PRINTF("Node location: %f %f\n", settings.location_lat, settings.location_long);
 #endif

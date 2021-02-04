@@ -16,7 +16,7 @@ void FileSystem::printDirContentsToDebug(const char *path, uint8_t level)
         }
         else if (dir.isFile())
         {
-            DEBUG_PRINTF("%*s/%s (%d bytes)\n", level * 2, "", dir.fileName().c_str(), dir.fileSize());
+            DEBUG_PRINTF("%*s/%s (%u bytes)\n", level * 2, "", dir.fileName().c_str(), dir.fileSize());
         }
     }
 #endif
@@ -32,7 +32,7 @@ void FileSystem::mount()
     // Print filesystem info
     FSInfo fsInfo;
     _fs->info(fsInfo);
-    DEBUG_PRINTF("%d of %d bytes used (%.2f%%), max path length: %d, max open files: %d\n",
+    DEBUG_PRINTF("%u of %u bytes used (%.2f%%), max path length: %u, max open files: %u\n",
                  fsInfo.usedBytes, fsInfo.totalBytes, ((float)fsInfo.usedBytes / fsInfo.totalBytes) * 100.0f,
                  fsInfo.maxPathLength, fsInfo.maxOpenFiles);
 

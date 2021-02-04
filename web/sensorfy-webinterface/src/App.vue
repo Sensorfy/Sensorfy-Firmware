@@ -10,9 +10,9 @@
         position="center left"
       />
 
-      <v-spacer />
+      <v-spacer/>
 
-      <v-btn text>
+      <v-btn text @click="$remote.setConfigMode(false)">
         Disable Config Mode
         <v-icon right>{{ mdiWifiOff }}</v-icon>
       </v-btn>
@@ -43,19 +43,40 @@
         </v-row>
       </v-container>
     </v-main>
+
+    <v-overlay opacity="0.8" :value="!$remote.connected" class="text-center">
+      <v-progress-circular indeterminate size="50"/>
+      <p class="mt-8">Connecting to node, please wait…</p>
+    </v-overlay>
+
+    <v-snackbar v-model="snackbar.visible" :timeout="5000">
+      {{ snackbar.text }}
+    </v-snackbar>
   </v-app>
 </template>
 
 <script>
-import { mdiWifiOff } from "@mdi/js";
+import { mdiWifiOff } from '@mdi/js';
+import { EVENT_SEND_ERROR } from '@/remote';
 
 export default {
-  name: "App",
+  name: 'App',
 
   components: {},
 
   data: () => ({
-    mdiWifiOff,
+    snackbar: {
+      visible: false,
+      text: null
+    },
+    mdiWifiOff
   }),
+
+  created () {
+    this.$remote.$on(EVENT_SEND_ERROR, errorMessage => {
+      this.snackbar.text = errorMessage;
+      this.snackbar.visible = true;
+    });
+  }
 };
 </script>

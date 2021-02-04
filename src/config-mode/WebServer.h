@@ -4,6 +4,7 @@
 
 #include "utils/debug.h"
 #include "persistence/FileSystem.h"
+#include "WebSocketServer.h"
 
 #define WEBSERVER_PORT 80
 #define WEBSERVER_URL "http://sensorfy-config/index.html"
@@ -47,6 +48,7 @@ class WebServer
 {
 private:
     FileSystem *_fileSystem;
+    WebSocketServer *_webSocketServer;
 
     AsyncWebServer _server{WEBSERVER_PORT};
 
@@ -58,7 +60,7 @@ private:
     CaptiveRedirectHandler _captiveRedirectHandler;
 
 public:
-    WebServer(FileSystem *fileSystem);
+    WebServer(FileSystem *fileSystem, WebSocketServer *webSocketServer);
 
     void start();
     void stop();

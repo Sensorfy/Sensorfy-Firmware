@@ -84,7 +84,7 @@ size_t ProtobufClass::encode(pb_ostream_t *ostream, const pb_msgdesc_t *fields, 
 {
     if (pb_encode(ostream, fields, src_struct))
     {
-        DEBUG_PRINTF("Encoded data as %d bytes.\n", ostream->bytes_written);
+        DEBUG_PRINTF("Encoded data as %u bytes.\n", ostream->bytes_written);
         return ostream->bytes_written;
     }
     else

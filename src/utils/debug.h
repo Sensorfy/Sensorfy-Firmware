@@ -8,7 +8,7 @@ extern SoftwareSerial Debug;
 // Macro that prints the debug log prefix with file and line number
 #if DEBUG_ENABLED
 #define DEBUG_PRINT_PREFIX() \
-    Debug.printf_P(PSTR("[%07d %S:%d] "), millis(), F(__FILE__), __LINE__)
+    Debug.printf_P(PSTR("[%07lu %S:%d] "), millis(), F(__FILE__), __LINE__)
 #else
 #define DEBUG_PRINT_PREFIX()
 #endif

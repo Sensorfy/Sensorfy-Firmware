@@ -8,7 +8,7 @@ ConfigMode::ConfigMode(FileSystem *fileSystem,
     : _fileSystem{fileSystem},
       _nodeConfig{nodeConfig},
       _internalDigitalPortExpander{internalDigitalPortExpander},
-      _webServer{fileSystem} {}
+      _webServer{fileSystem, &_webSocketServer} {}
 
 void ConfigMode::startWiFiAccessPoint()
 {
@@ -104,6 +104,7 @@ void ConfigMode::disable()
 
     DEBUG_PRINTLN(F("Disabling config mode..."));
 
+    _webSocketServer.closeConnections();
     _webServer.stop();
     stopDNSServer();
     stopWiFiAccessPoint();

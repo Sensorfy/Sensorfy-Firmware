@@ -7,6 +7,7 @@
 #include "persistence/NodeConfig.h"
 #include "hardware/InternalDigitalPortExpander.h"
 #include "WebServer.h"
+#include "WebSocketServer.h"
 
 class ConfigMode
 {
@@ -16,6 +17,7 @@ private:
     InternalDigitalPortExpander *_internalDigitalPortExpander;
 
     WebServer _webServer;
+    WebSocketServer _webSocketServer;
 
     DNSServer _dnsServer;
 
@@ -39,4 +41,9 @@ public:
     void disable();
 
     void tick();
+
+    void onCommandReceived(CommandReceivedHandler handler)
+    {
+        _webSocketServer.onCommandReceived(handler);
+    }
 };

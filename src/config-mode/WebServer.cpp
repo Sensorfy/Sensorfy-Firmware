@@ -1,6 +1,7 @@
 #include "WebServer.h"
 
-WebServer::WebServer(FileSystem *fileSystem) : _fileSystem{fileSystem} {}
+WebServer::WebServer(FileSystem *fileSystem, WebSocketServer *webSocketServer)
+    : _fileSystem{fileSystem}, _webSocketServer{webSocketServer} {}
 
 void WebServer::start()
 {
@@ -20,6 +21,9 @@ void WebServer::start()
     // Serve static files from the file system
     _server.serveStatic("/", *(_fileSystem->getUnderlyingFs()), "/web")
         .setDefaultFile("index.html");
+
+    // Add websocket handler
+    _server.addHandler(_webSocketServer->getHandler());
 
     // Redirect all other URLs to the main page
     _server.addHandler(&_captiveRedirectHandler);

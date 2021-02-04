@@ -6,6 +6,7 @@
 #include "persistence/NodeConfig.h"
 #include "hardware/InternalDigitalPortExpander.h"
 #include "config-mode/ConfigMode.h"
+#include "CommandHandler.h"
 
 #define CONFIG_MODE_AND_DEBUG_PIN D0
 #define FACTORY_RESET_PIN A0
@@ -19,6 +20,8 @@ FileSystem _fileSystem;
 NodeConfig _nodeConfig{&_fileSystem};
 InternalDigitalPortExpander _internalDigitalPortExpander;
 ConfigMode _configMode{&_fileSystem, &_nodeConfig, &_internalDigitalPortExpander};
+
+CommandHandler _commandHandler{&_configMode};
 
 // Make sure the WiFi modem doesn't start up on boot
 void preinit()
@@ -36,6 +39,10 @@ void setup()
 
   // Should a factory reset be performed?
   bool factoryReset = analogRead(FACTORY_RESET_PIN) < 100;
+
+  // Always enable to the config mode after factory reset
+  if (factoryReset)
+    configMode = true;
 
 #if DEBUG_ENABLED
 
