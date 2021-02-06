@@ -42,8 +42,20 @@ public:
 
     void tick();
 
+    void broadcastReport(Report &report)
+    {
+        _webSocketServer.broadcastReport(report);
+    }
+
+    void onClientConnected(ClientConnectedHandler handler)
+    {
+        _webSocketServer.onClientConnected(handler);
+    }
+
     void onCommandReceived(CommandReceivedHandler handler)
     {
         _webSocketServer.onCommandReceived(handler);
     }
+
+    bool isEnabled() { return _enabled; }
 };

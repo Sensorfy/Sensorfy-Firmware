@@ -28,6 +28,8 @@ void WebSocketServer::handleEvent(AsyncWebSocket *server,
     {
     case WS_EVT_CONNECT:
         DEBUG_PRINTF("New websocket client connected: #%u (%s)\n", client->id(), client->remoteIP().toString().c_str());
+        if (_clientConnectedHandler != NULL)
+            _clientConnectedHandler();
         break;
 
     case WS_EVT_DISCONNECT:
@@ -94,4 +96,20 @@ void WebSocketServer::closeConnections()
     DEBUG_PRINTLN(F("Closing all client connections..."));
 
     _socket.closeAll();
+}
+
+void WebSocketServer::broadcastReport(Report &report)
+{
+    // Encode report
+    uint8_t buffer[Report_size];
+    size_t encoded = Protobuf.encode(buffer, Report_size, Report_fields, &report);
+    if (!encoded)
+    {
+        DEBUG_PRINTLN(F("Encoding report failed. Report will not be send."));
+        return;
+    }
+
+    // Broadcast data
+    DEBUG_PRINTF("Broadcasting a report of %u bytes to all clients...\n", encoded);
+    _socket.binaryAll(buffer, encoded);
 }

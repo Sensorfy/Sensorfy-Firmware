@@ -3,6 +3,7 @@
 #include <ESPAsyncWebServer.h>
 
 #include "proto/commands.pb.h"
+#include "proto/reports.pb.h"
 #include "utils/callbacks.h"
 
 #define WEBSOCKET_URL "/ws"
@@ -12,6 +13,7 @@ class WebSocketServer
 private:
     AsyncWebSocket _socket{WEBSOCKET_URL};
 
+    ClientConnectedHandler _clientConnectedHandler;
     CommandReceivedHandler _commandReceivedHandler;
 
     void handleEvent(AsyncWebSocket *server,
@@ -27,6 +29,13 @@ public:
     WebSocketServer();
 
     void closeConnections();
+
+    void broadcastReport(Report &report);
+
+    void onClientConnected(ClientConnectedHandler handler)
+    {
+        _clientConnectedHandler = handler;
+    }
 
     void onCommandReceived(CommandReceivedHandler handler)
     {

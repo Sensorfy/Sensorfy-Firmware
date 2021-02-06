@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Esp.h>
+
 #if DEBUG_ENABLED
 #include <SoftwareSerial.h>
 extern SoftwareSerial Debug;
@@ -29,4 +31,17 @@ extern SoftwareSerial Debug;
     Debug.printf_P(PSTR(fmt), ##__VA_ARGS__)
 #else
 #define DEBUG_PRINTF(fmt, ...)
+#endif
+
+// Macro for assertions
+#if DEBUG_ENABLED
+#define DEBUG_ASSERT(exp)                              \
+    if (!(exp))                                        \
+    {                                                  \
+        DEBUG_PRINTF("Assertion failed: %S", F(#exp)); \
+        delay(1000);                                   \
+        ESP.restart();                                 \
+    }
+#else
+#define DEBUG_ASSERT(exp)
 #endif

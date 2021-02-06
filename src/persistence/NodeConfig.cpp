@@ -16,6 +16,17 @@ void NodeConfig::initSettings()
     snprintf_P(settings.node_name, sizeof(settings.node_name),
                PSTR("Unnamed Sensorfy Node %d"), random(1000, 9999));
 
+    // Wake every hour by default
+    settings.wake_interval = 1 * 60 * 60;
+
+    // Link-check mode is preferred to be enabled by default
+    settings.link_check_enabled = true;
+
+    // Enable ADR by default
+    settings.adr_enabled = true;
+
+    // TODO: Pre-define spreading factor and tx power?
+
     _settings = settings;
 }
 
@@ -127,5 +138,6 @@ void NodeConfig::printSettingsToDebug()
     DEBUG_PRINTF("Settings version: %u\n", settings.version);
     DEBUG_PRINTF("Node name: %s\n", settings.node_name);
     DEBUG_PRINTF("Node location: %f %f\n", settings.location_lat, settings.location_long);
+    // TODO: Log all setting values
 #endif
 }

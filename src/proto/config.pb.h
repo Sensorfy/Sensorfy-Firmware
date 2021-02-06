@@ -13,8 +13,22 @@
 typedef struct _NodeSettings {
     uint32_t version;
     char node_name[33];
+    char node_contact[33];
     float location_lat;
     float location_long;
+    char wifi_password[17];
+    uint32_t wake_interval;
+    pb_byte_t app_eui[8];
+    pb_byte_t dev_eui[8];
+    pb_byte_t app_key[16];
+    bool joined;
+    pb_byte_t dev_address[4];
+    pb_byte_t nwk_session_key[16];
+    pb_byte_t app_session_key[16];
+    bool link_check_enabled;
+    bool adr_enabled;
+    uint32_t spreading_factor;
+    int32_t tx_power;
 } NodeSettings;
 
 
@@ -23,21 +37,49 @@ extern "C" {
 #endif
 
 /* Initializer values for message structs */
-#define NodeSettings_init_default                {0, "", 0, 0}
-#define NodeSettings_init_zero                   {0, "", 0, 0}
+#define NodeSettings_init_default                {0, "", "", 0, 0, "", 0, {0}, {0}, {0}, 0, {0}, {0}, {0}, 0, 0, 0, 0}
+#define NodeSettings_init_zero                   {0, "", "", 0, 0, "", 0, {0}, {0}, {0}, 0, {0}, {0}, {0}, 0, 0, 0, 0}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define NodeSettings_version_tag                 1
 #define NodeSettings_node_name_tag               2
-#define NodeSettings_location_lat_tag            3
-#define NodeSettings_location_long_tag           4
+#define NodeSettings_node_contact_tag            3
+#define NodeSettings_location_lat_tag            4
+#define NodeSettings_location_long_tag           5
+#define NodeSettings_wifi_password_tag           6
+#define NodeSettings_wake_interval_tag           7
+#define NodeSettings_app_eui_tag                 8
+#define NodeSettings_dev_eui_tag                 9
+#define NodeSettings_app_key_tag                 10
+#define NodeSettings_joined_tag                  11
+#define NodeSettings_dev_address_tag             12
+#define NodeSettings_nwk_session_key_tag         13
+#define NodeSettings_app_session_key_tag         14
+#define NodeSettings_link_check_enabled_tag      15
+#define NodeSettings_adr_enabled_tag             16
+#define NodeSettings_spreading_factor_tag        17
+#define NodeSettings_tx_power_tag                18
 
 /* Struct field encoding specification for nanopb */
 #define NodeSettings_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, UINT32,   version,           1) \
 X(a, STATIC,   SINGULAR, STRING,   node_name,         2) \
-X(a, STATIC,   SINGULAR, FLOAT,    location_lat,      3) \
-X(a, STATIC,   SINGULAR, FLOAT,    location_long,     4)
+X(a, STATIC,   SINGULAR, STRING,   node_contact,      3) \
+X(a, STATIC,   SINGULAR, FLOAT,    location_lat,      4) \
+X(a, STATIC,   SINGULAR, FLOAT,    location_long,     5) \
+X(a, STATIC,   SINGULAR, STRING,   wifi_password,     6) \
+X(a, STATIC,   SINGULAR, UINT32,   wake_interval,     7) \
+X(a, STATIC,   SINGULAR, FIXED_LENGTH_BYTES, app_eui,           8) \
+X(a, STATIC,   SINGULAR, FIXED_LENGTH_BYTES, dev_eui,           9) \
+X(a, STATIC,   SINGULAR, FIXED_LENGTH_BYTES, app_key,          10) \
+X(a, STATIC,   SINGULAR, BOOL,     joined,           11) \
+X(a, STATIC,   SINGULAR, FIXED_LENGTH_BYTES, dev_address,      12) \
+X(a, STATIC,   SINGULAR, FIXED_LENGTH_BYTES, nwk_session_key,  13) \
+X(a, STATIC,   SINGULAR, FIXED_LENGTH_BYTES, app_session_key,  14) \
+X(a, STATIC,   SINGULAR, BOOL,     link_check_enabled,  15) \
+X(a, STATIC,   SINGULAR, BOOL,     adr_enabled,      16) \
+X(a, STATIC,   SINGULAR, UINT32,   spreading_factor,  17) \
+X(a, STATIC,   SINGULAR, SINT32,   tx_power,         18)
 #define NodeSettings_CALLBACK NULL
 #define NodeSettings_DEFAULT NULL
 
@@ -47,7 +89,7 @@ extern const pb_msgdesc_t NodeSettings_msg;
 #define NodeSettings_fields &NodeSettings_msg
 
 /* Maximum encoded size of messages (where known) */
-#define NodeSettings_size                        50
+#define NodeSettings_size                        209
 
 #ifdef __cplusplus
 } /* extern "C" */

@@ -6,7 +6,7 @@
 #include "persistence/NodeConfig.h"
 #include "hardware/InternalDigitalPortExpander.h"
 #include "config-mode/ConfigMode.h"
-#include "CommandHandler.h"
+#include "CommunicationManager.h"
 
 #define CONFIG_MODE_AND_DEBUG_PIN D0
 #define FACTORY_RESET_PIN A0
@@ -21,7 +21,7 @@ NodeConfig _nodeConfig{&_fileSystem};
 InternalDigitalPortExpander _internalDigitalPortExpander;
 ConfigMode _configMode{&_fileSystem, &_nodeConfig, &_internalDigitalPortExpander};
 
-CommandHandler _commandHandler{&_configMode};
+CommunicationManager _communicationManager{&_configMode, &_nodeConfig};
 
 // Make sure the WiFi modem doesn't start up on boot
 void preinit()
@@ -60,7 +60,7 @@ void setup()
   Debug.begin(9600, SWSERIAL_8N1, -1, CONFIG_MODE_AND_DEBUG_PIN);
 
   DEBUG_PRINTLN(F("----------"));
-  DEBUG_PRINTF("Starting Sensorfy firmware (Built: %S %S)...\n", F(__DATE__), F(__TIME__));
+  DEBUG_PRINTF("Starting Sensorfy firmware (Build %S %S)...\n", F(__DATE__), F(__TIME__));
   DEBUG_PRINTF("Booting into %S%s mode...\n", configMode ? F("CONFIG") : F("NORMAL"), factoryReset ? F(" + FACTORY RESET") : F(""));
   DEBUG_PRINTLN(F("----------"));
 
