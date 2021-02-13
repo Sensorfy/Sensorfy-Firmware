@@ -18,21 +18,20 @@ message NodeSettingsReport {
     
     float location_lat = 4;
     float location_long = 5;
-    bool location_auto_update_active = 6;
 
-    bool wifi_password_set = 7;
+    bool wifi_password_set = 6;
 
-    uint32 wake_interval = 8;
+    uint32 wake_interval = 7;
 
-    bytes app_eui = 9 [(nanopb).max_size = 8, (nanopb).fixed_length = true];
-    bytes dev_eui = 10 [(nanopb).max_size = 8, (nanopb).fixed_length = true];
+    bytes app_eui = 8 [(nanopb).max_size = 8, (nanopb).fixed_length = true];
+    bytes dev_eui = 9 [(nanopb).max_size = 8, (nanopb).fixed_length = true];
 
-    bool app_key_set = 11;
+    bool app_key_set = 10;
 
-    bool link_check_enabled = 12;
-    bool adr_enabled = 13;
-    uint32 spreading_factor = 14;
-    sint32 tx_power = 15;
+    bool link_check_enabled = 11;
+    bool adr_enabled = 12;
+    uint32 spreading_factor = 13;
+    sint32 tx_power = 14;
 }
 
 // LorawanStatusReport, SensorsReport

@@ -7,6 +7,8 @@ import 'roboto-fontface/css/roboto/sass/roboto-fontface-regular.scss';
 import 'roboto-fontface/css/roboto/sass/roboto-fontface-medium.scss';
 import 'roboto-fontface/css/roboto/sass/roboto-fontface-bold.scss';
 
+import './styles/styles.scss';
+
 import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import remote from './remote';
@@ -15,7 +17,7 @@ Vue.config.productionTip = false;
 
 Vue.prototype.$remote = remote;
 
-new Vue({
+window.app = new Vue({
   vuetify,
   render: h => h(App)
 }).$mount('#app');

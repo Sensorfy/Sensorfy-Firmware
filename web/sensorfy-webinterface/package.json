@@ -6,14 +6,15 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "proto": "pbjs -t static-module -w es6 --es6 --l eslint-disable -o src/proto/index.js ../../proto/commands.proto"
+    "proto": "pbjs -t static-module -w es6 --es6 --l eslint-disable -o src/proto/index.js ../../proto/commands.proto ../../proto/reports.proto"
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "lodash": "^4.17.20",
+    "protobufjs": "~6.10.2",
     "roboto-fontface": "*",
     "vue": "^2.6.11",
-    "vuetify": "^2.4.0",
-    "protobufjs": "~6.10.2"
+    "vuetify": "^2.4.0"
   },
   "devDependencies": {
     "@mdi/js": "^5.9.55",

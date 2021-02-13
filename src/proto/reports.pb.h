@@ -16,7 +16,6 @@ typedef struct _NodeSettingsReport {
     char node_contact[33];
     float location_lat;
     float location_long;
-    bool location_auto_update_active;
     bool wifi_password_set;
     uint32_t wake_interval;
     pb_byte_t app_eui[8];
@@ -42,9 +41,9 @@ extern "C" {
 
 /* Initializer values for message structs */
 #define Report_init_default                      {0, {NodeSettingsReport_init_default}}
-#define NodeSettingsReport_init_default          {"", "", "", 0, 0, 0, 0, 0, {0}, {0}, 0, 0, 0, 0, 0}
+#define NodeSettingsReport_init_default          {"", "", "", 0, 0, 0, 0, {0}, {0}, 0, 0, 0, 0, 0}
 #define Report_init_zero                         {0, {NodeSettingsReport_init_zero}}
-#define NodeSettingsReport_init_zero             {"", "", "", 0, 0, 0, 0, 0, {0}, {0}, 0, 0, 0, 0, 0}
+#define NodeSettingsReport_init_zero             {"", "", "", 0, 0, 0, 0, {0}, {0}, 0, 0, 0, 0, 0}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define NodeSettingsReport_firmware_version_tag  1
@@ -52,16 +51,15 @@ extern "C" {
 #define NodeSettingsReport_node_contact_tag      3
 #define NodeSettingsReport_location_lat_tag      4
 #define NodeSettingsReport_location_long_tag     5
-#define NodeSettingsReport_location_auto_update_active_tag 6
-#define NodeSettingsReport_wifi_password_set_tag 7
-#define NodeSettingsReport_wake_interval_tag     8
-#define NodeSettingsReport_app_eui_tag           9
-#define NodeSettingsReport_dev_eui_tag           10
-#define NodeSettingsReport_app_key_set_tag       11
-#define NodeSettingsReport_link_check_enabled_tag 12
-#define NodeSettingsReport_adr_enabled_tag       13
-#define NodeSettingsReport_spreading_factor_tag  14
-#define NodeSettingsReport_tx_power_tag          15
+#define NodeSettingsReport_wifi_password_set_tag 6
+#define NodeSettingsReport_wake_interval_tag     7
+#define NodeSettingsReport_app_eui_tag           8
+#define NodeSettingsReport_dev_eui_tag           9
+#define NodeSettingsReport_app_key_set_tag       10
+#define NodeSettingsReport_link_check_enabled_tag 11
+#define NodeSettingsReport_adr_enabled_tag       12
+#define NodeSettingsReport_spreading_factor_tag  13
+#define NodeSettingsReport_tx_power_tag          14
 #define Report_nodeSettingsReport_tag            1
 
 /* Struct field encoding specification for nanopb */
@@ -77,16 +75,15 @@ X(a, STATIC,   SINGULAR, STRING,   node_name,         2) \
 X(a, STATIC,   SINGULAR, STRING,   node_contact,      3) \
 X(a, STATIC,   SINGULAR, FLOAT,    location_lat,      4) \
 X(a, STATIC,   SINGULAR, FLOAT,    location_long,     5) \
-X(a, STATIC,   SINGULAR, BOOL,     location_auto_update_active,   6) \
-X(a, STATIC,   SINGULAR, BOOL,     wifi_password_set,   7) \
-X(a, STATIC,   SINGULAR, UINT32,   wake_interval,     8) \
-X(a, STATIC,   SINGULAR, FIXED_LENGTH_BYTES, app_eui,           9) \
-X(a, STATIC,   SINGULAR, FIXED_LENGTH_BYTES, dev_eui,          10) \
-X(a, STATIC,   SINGULAR, BOOL,     app_key_set,      11) \
-X(a, STATIC,   SINGULAR, BOOL,     link_check_enabled,  12) \
-X(a, STATIC,   SINGULAR, BOOL,     adr_enabled,      13) \
-X(a, STATIC,   SINGULAR, UINT32,   spreading_factor,  14) \
-X(a, STATIC,   SINGULAR, SINT32,   tx_power,         15)
+X(a, STATIC,   SINGULAR, BOOL,     wifi_password_set,   6) \
+X(a, STATIC,   SINGULAR, UINT32,   wake_interval,     7) \
+X(a, STATIC,   SINGULAR, FIXED_LENGTH_BYTES, app_eui,           8) \
+X(a, STATIC,   SINGULAR, FIXED_LENGTH_BYTES, dev_eui,           9) \
+X(a, STATIC,   SINGULAR, BOOL,     app_key_set,      10) \
+X(a, STATIC,   SINGULAR, BOOL,     link_check_enabled,  11) \
+X(a, STATIC,   SINGULAR, BOOL,     adr_enabled,      12) \
+X(a, STATIC,   SINGULAR, UINT32,   spreading_factor,  13) \
+X(a, STATIC,   SINGULAR, SINT32,   tx_power,         14)
 #define NodeSettingsReport_CALLBACK NULL
 #define NodeSettingsReport_DEFAULT NULL
 
@@ -98,8 +95,8 @@ extern const pb_msgdesc_t NodeSettingsReport_msg;
 #define NodeSettingsReport_fields &NodeSettingsReport_msg
 
 /* Maximum encoded size of messages (where known) */
-#define Report_size                              163
-#define NodeSettingsReport_size                  160
+#define Report_size                              161
+#define NodeSettingsReport_size                  158
 
 #ifdef __cplusplus
 } /* extern "C" */

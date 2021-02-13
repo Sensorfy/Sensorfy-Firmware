@@ -35,12 +35,65 @@ void CommunicationManager::handleGenericCommand(Command &command, CommunicationC
     case Command_setConfigModeCommand_tag:
         handleCommand(command.command.setConfigModeCommand, sourceChannel);
         break;
+    case Command_setNodeSettingsCommand_tag:
+        handleCommand(command.command.setNodeSettingsCommand, sourceChannel);
+        break;
     }
 }
 
 void CommunicationManager::handleCommand(SetConfigModeCommand &command, CommunicationChannel sourceChannel)
 {
     DEBUG_PRINTF("Handling SetConfigModeCommand {enabled: %S}...\n", btoa(command.enabled));
+
+    // TODO: Disable config mode
+}
+
+void CommunicationManager::handleCommand(SetNodeSettingsCommand &command, CommunicationChannel sourceChannel)
+{
+    DEBUG_PRINTF("Handling SetNodeSettingsCommand "
+                 "{node_name: \"%s\", node_contact: \"%s\", location_lat: %f, location_long: %f, wifi_password: \"%s\", wake_interval: %u}...\n",
+                 command.node_name,
+                 command.node_contact,
+                 command.location_lat,
+                 command.location_long,
+                 command.wifi_password,
+                 command.wake_interval);
+
+    // Query current settings
+    NodeSettings settings = _nodeConfig->getSettings();
+
+    DEBUG_ASSERT(sizeof(settings.node_name) == sizeof(command.node_name));
+    strncpy(settings.node_name, command.node_name, sizeof(settings.node_name));
+
+    DEBUG_ASSERT(sizeof(settings.node_contact) == sizeof(command.node_contact));
+    strncpy(settings.node_contact, command.node_contact, sizeof(settings.node_contact));
+
+    if (command.location_lat == 0 || command.location_long == 0)
+    {
+        settings.location_lat = settings.location_long = 0;
+    }
+    else
+    {
+        settings.location_lat = command.location_lat;
+        settings.location_long = command.location_long;
+    }
+
+    // Change the WiFi password only, if it should be disabled or replaced
+    // To keep the previous password, the client will send a non-empty password thats shorter than 8 characters
+    if (command.wifi_password[0] == '\0' || strlen(command.wifi_password) >= 8)
+    {
+        DEBUG_ASSERT(sizeof(settings.wifi_password) == sizeof(command.wifi_password));
+        strncpy(settings.wifi_password, command.wifi_password, sizeof(settings.wifi_password));
+    }
+
+    if (command.wake_interval >= 60)
+        settings.wake_interval = command.wake_interval;
+
+    // Update settings
+    _nodeConfig->updateSettings(settings);
+
+    // Broadcast the changed node settings to all config mode clients
+    sendNodeSettingsReport(CONFIG_MODE_WIFI);
 }
 
 void CommunicationManager::sendReport(Report &report, CommunicationChannel channels)
@@ -62,14 +115,14 @@ void CommunicationManager::sendNodeSettingsReport(CommunicationChannel channels)
     snprintf_P(nodeSettingsReport.firmware_version, sizeof(nodeSettingsReport.firmware_version),
                PSTR("Build %S %S"), F(__DATE__), F(__TIME__));
 
+    DEBUG_ASSERT(sizeof(nodeSettingsReport.node_name) == sizeof(settings.node_name));
     strncpy(nodeSettingsReport.node_name, settings.node_name, sizeof(nodeSettingsReport.node_name));
+
+    DEBUG_ASSERT(sizeof(nodeSettingsReport.node_contact) == sizeof(settings.node_contact));
     strncpy(nodeSettingsReport.node_contact, settings.node_contact, sizeof(nodeSettingsReport.node_contact));
 
     nodeSettingsReport.location_lat = settings.location_lat;
     nodeSettingsReport.location_long = settings.location_long;
-
-    // TODO: Check for GPS sensor availability
-    nodeSettingsReport.location_auto_update_active = false;
 
     nodeSettingsReport.wifi_password_set = (settings.wifi_password[0] != '\0');
     nodeSettingsReport.wake_interval = settings.wake_interval;

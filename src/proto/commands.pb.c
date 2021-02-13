@@ -12,4 +12,7 @@ PB_BIND(Command, Command, AUTO)
 PB_BIND(SetConfigModeCommand, SetConfigModeCommand, AUTO)
 
 
+PB_BIND(SetNodeSettingsCommand, SetNodeSettingsCommand, AUTO)
+
+
 

@@ -6,10 +6,21 @@ import 'nanopb.proto';
 message Command {
     oneof command {
         SetConfigModeCommand setConfigModeCommand = 1;
+        SetNodeSettingsCommand setNodeSettingsCommand = 2;
     }
 }
 
 // Enables or disables the config mode
 message SetConfigModeCommand {
     bool enabled = 1;
+}
+
+// Set some node settings
+message SetNodeSettingsCommand {
+    string node_name = 1 [(nanopb).max_length = 32];
+    string node_contact = 2 [(nanopb).max_length = 32];
+    float location_lat = 3;
+    float location_long = 4;
+    string wifi_password = 5 [(nanopb).max_length = 16];
+    uint32 wake_interval = 6;
 }

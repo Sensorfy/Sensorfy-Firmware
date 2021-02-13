@@ -1,15 +1,17 @@
 import Vue from 'vue';
-import { Command } from '@/proto';
+import { Command, Report } from '@/proto';
 
 // Event names
 export const EVENT_SEND_ERROR = 'send-error';
+export const EVENT_DECODE_ERROR = 'decode-error';
 
 const webSocketUrl = localStorage.getItem('sensorfy_websocketUrl') || `ws://${window.location.host}/ws`;
 
 export default new Vue({
   data: () => ({
     websocket: null,
-    connected: false
+    connected: false,
+    nodeSettings: null
   }),
 
   methods: {
@@ -20,6 +22,7 @@ export default new Vue({
       }
 
       this.websocket = new WebSocket(webSocketUrl);
+      this.websocket.binaryType = 'arraybuffer';
       this.websocket.onopen = () => {
         this.connected = true;
       };
@@ -27,6 +30,29 @@ export default new Vue({
         this.connected = false;
         setTimeout(() => this.reconnect(), 3000);
       };
+      this.websocket.onmessage = message => {
+        // Ensure the message is binary
+        if (!(message.data instanceof ArrayBuffer)) {
+          return;
+        }
+
+        // Decode the message
+        let report;
+        try {
+          report = Report.decode(new Uint8Array(message.data));
+        } catch (e) {
+          this.$emit(EVENT_DECODE_ERROR, `Decoding a received report failed: ${e}`);
+          return;
+        }
+
+        // Process the report
+        this.processReport(report);
+      };
+    },
+    processReport (report) {
+      if (report.nodeSettingsReport) {
+        this.nodeSettings = report.nodeSettingsReport;
+      }
     },
     sendCommand (command) {
       // Create a protobuf message
@@ -35,7 +61,7 @@ export default new Vue({
       // Verify the message
       const error = Command.verify(message);
       if (error) {
-        this.$emit(EVENT_SEND_ERROR, `Message verification failed: ${error}`);
+        this.$emit(EVENT_SEND_ERROR, `Verification of command message failed: ${error}`);
         return;
       }
 
@@ -47,6 +73,13 @@ export default new Vue({
       this.sendCommand({
         setConfigModeCommand: {
           enabled
+        }
+      });
+    },
+    setNodeSettings (settings) {
+      this.sendCommand({
+        setNodeSettingsCommand: {
+          ...settings
         }
       });
     }
