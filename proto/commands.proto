@@ -7,6 +7,7 @@ message Command {
     oneof command {
         SetConfigModeCommand setConfigModeCommand = 1;
         SetNodeSettingsCommand setNodeSettingsCommand = 2;
+        SetLorawanSettingsCommand setLorawanSettingsCommand = 3;
     }
 }
 
@@ -23,4 +24,15 @@ message SetNodeSettingsCommand {
     float location_long = 4;
     string wifi_password = 5 [(nanopb).max_length = 16];
     uint32 wake_interval = 6;
+}
+
+// Set LoRaWAN settings
+message SetLorawanSettingsCommand {
+    bytes app_eui = 1 [(nanopb).max_size = 8, (nanopb).fixed_length = true];
+    bytes dev_eui = 2 [(nanopb).max_size = 8, (nanopb).fixed_length = true];
+    bytes app_key = 3 [(nanopb).max_size = 16, (nanopb).fixed_length = true];
+    bool link_check_enabled = 4;
+    bool adr_enabled = 5;
+    uint32 spreading_factor = 6;
+    sint32 tx_power = 7;
 }
